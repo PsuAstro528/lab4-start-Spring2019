@@ -1,5 +1,6 @@
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
 LsqFit = "2fda8390-95c7-5789-9bda-21331edee243"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 OptimBase = "87e2bd06-a317-5318-96d9-3ecbac512eee"
