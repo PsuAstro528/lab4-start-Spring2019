@@ -8,10 +8,11 @@ A common problem is to find the optimum (i.e., either minimum or maximum) value 
 Be aware that the field of optimization is extremely rich and there are numerous algorithms, libraries and packages, most specializing in some more specific class of optimization problems.  For a list of Julia packages for optimization, see [JuliaOpt's packages page](http://www.juliaopt.org/packages/) and the [JuliaNLSolvers organization](https://github.com/JuliaNLSolvers).
 
 ```julia
-# First Install any packages needed
+#= In case you need to install any packages needed
 using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
+=#
 ```
 
 ## Fitting a model to data
