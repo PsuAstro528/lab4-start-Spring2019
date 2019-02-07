@@ -237,13 +237,16 @@ Profile.print()
 The output is quite detailed.  You could scroll through every line, looking for which functions that we wrote are taking a large fraction of the time.  However, often, it's better to start looking at a graphical representation of the profiler results.  For that, we'll use the [`ProfileView.jl`](https://github.com/timholy/ProfileView.jl) pacakge
 
 ```julia
-PROFILEVIEW_USEGTK = true   # true to make flame plot appear as a separate window
-using ProfileView
+PROFILEVIEW_USEGTK = true   # true to make flame plot appear as a separate window, 
+                            # false seems like it should be necessary to make it appear in your browser
+                            # but if there are problems building/finding GTK, then it might be ignored
+using ProfileView           # May need to add this package, but some people had problems installing the dependcies on ACI
 ```
 
 ```julia
-ProfileView.closeall()      # Prevent confusion from two windows 
-ProfileView.view();
+ProfileView.closeall()      # Prevent confusion from two windows and reduce risk of crashing
+                            # Comment out closeall()'s if they give you problems on ACI 
+ProfileView.view()
 ```
 
 Hopefully, The bottom lines show the outer level function calls.  If each row isn't already labled, then hover your mouse over a bar to see what function and line number it represents.  Because we're working interactively, some rows at the bottom that aren't particularly relevant.  Starting at the bottom, shift your attention upwards until you reach the bar labeled "macro expansion in Profile.jl...".  This bar represents the entire time that was profiled.  Most of the time was spent calling other functions, as can be seen be observing the bars in the row above are nearly as wide as the bar labeled "Profile.jl...".  These functions call other functions and at the very top you can see the small functions being called.  For plain .jl files, it's simply the line number.  For code in a Jupyter notebook, the cell number is in square brackets and the line within that cell after the semicolon.  (ProfileView also tries to be helpful by hiding some of the smallest functions like accessing an element of an array or copying data, since most programmers are very unlikely to improve the efficiency of those.)  
@@ -299,15 +302,17 @@ INSERT RESPONCE
 Let's profile our new code.
 
 ```julia
-#Profile.init(n = 10^6, delay = 0.00001)  # Tell profiler how frequently to check what line of code is running
+#Profile.init(n = 10^6, delay = 0.000001)  # Uncomments if you want to tell profiler how frequently to check what line of code is running
 Profile.clear()     # Only need to clear() if you run @profile multiple times
 @profile curve_fit(wavelength_model_centered_v2, jacobian_wavelength_model_centered_v1, 
                             x_obs, y_obs, weights, param_guess)
+# If you don't get enouguh samples to be useful, then you can write a small function with a for 
+# loop to do these operations repeatedly and profile that.
 ```
 
 ```julia
 ProfileView.closeall()
-ProfileView.view();
+ProfileView.view()
 ```
 
 If you wanted to further improve the performance of optimizing this model, then you could try eliminating the calls to the `^` operator.  Since we're only using a cubic polynomial, it's likely write our create model as
@@ -347,7 +352,7 @@ Profile.init(delay = 0.00001)  # Tell profiler how frequently to check what line
 Profile.clear()     # Only need to clear() if you run @profile multiple times
 @profile result_lsqfit = curve_fit(wavelength_model_centered_v2, jacobian_wavelength_model_centered_v1, x_obs, y_obs, weights, param_guess)
 ProfileView.closeall()
-ProfileView.view();
+ProfileView.view()
 ```
 
 If you wanted to improve the performance further, what might you try next?
