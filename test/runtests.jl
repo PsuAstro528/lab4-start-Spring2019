@@ -1,3 +1,5 @@
+using Pkg
+Pkg.activate(".")
 using Glob
 if split(pwd(),'/')[end]!="test"
   try 
